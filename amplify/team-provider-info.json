@@ -22,7 +22,7 @@
       "function": {
         "yawstoneContactFunction": {
           "deploymentBucketName": "amplify-yawstone-dev-c2306-deployment",
-          "s3Key": "amplify-builds/yawstoneContactFunction-442b58636f3759796643-build.zip"
+          "s3Key": "amplify-builds/yawstoneContactFunction-457532722b5164435354-build.zip"
         }
       },
       "auth": {

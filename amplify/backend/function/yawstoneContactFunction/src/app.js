@@ -50,7 +50,7 @@ app.get('/contact/*', function(req, res) {
 
 app.post('/contact', async function(req, res) {
   try {
-    const { name, email, interest, message } = req.body;
+    const { name, email, phone, interest, message } = req.body;
     
     const params = {
       Destination: {
@@ -58,7 +58,7 @@ app.post('/contact', async function(req, res) {
       },
       Message: {
         Body: {
-          Text: { Data: `New Contact Inquiry:\n\nName: ${name}\nEmail: ${email}\nInterest: ${interest}\n\nMessage:\n${message}`, Charset: "UTF-8" }
+          Text: { Data: `New Contact Inquiry:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`, Charset: "UTF-8" }
         },
         Subject: { Data: `Yawstone Inquiry from ${name} [${interest}]`, Charset: "UTF-8" }
       },
