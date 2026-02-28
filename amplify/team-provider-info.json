@@ -1,0 +1,36 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-yawstone-dev-c2306-authRole",
+      "UnauthRoleArn": "arn:aws:iam::186250519284:role/amplify-yawstone-dev-c2306-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::186250519284:role/amplify-yawstone-dev-c2306-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-yawstone-dev-c2306-deployment",
+      "UnauthRoleName": "amplify-yawstone-dev-c2306-unauthRole",
+      "StackName": "amplify-yawstone-dev-c2306",
+      "StackId": "arn:aws:cloudformation:us-east-1:186250519284:stack/amplify-yawstone-dev-c2306/3fed0670-1455-11f1-8685-0affc0eaadc7",
+      "AmplifyAppId": "dkeuj1npkombo",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-yawstone-dev-c2306-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dkeuj1npkombo",
+          "type": "manual"
+        }
+      },
+      "function": {
+        "yawstoneContactFunction": {
+          "deploymentBucketName": "amplify-yawstone-dev-c2306-deployment",
+          "s3Key": "amplify-builds/yawstoneContactFunction-442b58636f3759796643-build.zip"
+        }
+      },
+      "auth": {
+        "yawstone": {}
+      },
+      "api": {
+        "contactapi": {}
+      }
+    }
+  }
+}

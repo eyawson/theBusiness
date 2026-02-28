@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "serviceName": "API Gateway",
+    "apiName": "contactapi",
+    "paths": [
+      {
+        "name": "/contact",
+        "lambdaFunction": "contactfunction",
+        "permissions": {
+          "setting": "open"
+        }
+      }
+    ]
+  }
+}
