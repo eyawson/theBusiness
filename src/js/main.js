@@ -1,0 +1,130 @@
+import '../css/style.css';
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Yawstone - Premium Web Design & Consultancy initialized.');
+
+    // --- Header Scroll Effect ---
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // --- Mobile Menu Toggle ---
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    
+    if (mobileMenuToggle && mainNav) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+        });
+    }
+
+    // --- Scroll Animations via IntersectionObserver ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                // Optional: stop observing once it's visible
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Select elements to animate
+    const animateElements = document.querySelectorAll(
+      '.hero-title, .hero-subtitle, .hero-actions, .section-title, .about-text, .stat-item, .service-card, .footer-top'
+    );
+    
+    animateElements.forEach((el, index) => {
+        el.classList.add('fade-up-element');
+        // Add staggered delays for standard lists/cards if needed computationally or rely on CSS child index
+        el.style.transitionDelay = `${(index % 3) * 0.1}s`;
+        observer.observe(el);
+    });
+
+    // --- Dynamic Hero Glow Follower (Optional premium touch) ---
+    const hero = document.querySelector('.hero');
+    const glow = document.querySelector('.hero-bg-glow');
+    if (hero && glow) {
+        hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            // Move glow smoothly towards mouse position
+            // Using a loose transformation for performance
+            glow.style.transform = `translate(${x * 0.1}px, calc(-50% + ${y * 0.1}px))`;
+        });
+    }
+
+    // --- Contact Form Handling (AWS API Gateway / SES integration) ---
+    const contactForm = document.getElementById('contact-form');
+    const formStatus = document.getElementById('form-status');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 1. Get form data
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData.entries());
+
+            // 2. Set loading state
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            formStatus.style.display = 'none';
+
+            try {
+                // TODO: Replace this URL with your actual AWS API Gateway endpoint URL
+                const API_ENDPOINT = 'https://YOUR_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/prod/contact';
+                
+                // Commenting out the actual fetch call until the endpoint is ready to prevent CORS/404 errors in dev
+                /*
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                */
+
+                // Simulated network request for UI demonstration until API is ready
+                await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+                // 3. Handle Success
+                formStatus.textContent = 'Thank you! Your inquiry has been sent. We will be in touch shortly.';
+                formStatus.className = 'form-status success fade-up-element is-visible';
+                formStatus.style.display = 'block';
+                contactForm.reset();
+
+            } catch (error) {
+                // 4. Handle Error
+                console.error('Submission error:', error);
+                formStatus.textContent = 'Oops! Something went wrong sending your message. Please try again or email us directly.';
+                formStatus.className = 'form-status error fade-up-element is-visible';
+                formStatus.style.display = 'block';
+            } finally {
+                // 5. Restore button state
+                submitBtn.textContent = 'Send Inquiry →';
+                submitBtn.disabled = false;
+            }
+        });
+    }
+});
