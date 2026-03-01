@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Select elements to animate
     const animateElements = document.querySelectorAll(
-      '.hero-title, .hero-subtitle, .hero-actions, .section-title, .about-text, .stat-item, .service-card, .footer-top'
+      '.hero-title, .hero-subtitle, .hero-actions, .section-title, .about-text, .stat-item, .service-card, .footer-top, .fade-up-element:not(.is-visible)'
     );
     
     animateElements.forEach((el, index) => {

@@ -1002,3 +1002,41 @@ a {
         gap: 2rem;
     }
 }
+
+/* ==================
+   SERVICE HERO SECTION
+================== */
+.service-hero {
+    height: 70vh;
+    min-height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Service Hero Backgrounds for Vite Production pathing */
+.bg-hero-web {
+    background-image: url('../assets/images/hero-web.png');
+}
+
+.bg-hero-servicenow {
+    background-image: url('../assets/images/hero-servicenow.png');
+}
+
+.bg-hero-cyber {
+    background-image: url('../assets/images/hero-cyber.png');
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(9, 9, 11, 0.4), rgba(9, 9, 11, 1));
+}
