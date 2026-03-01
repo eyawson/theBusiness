@@ -35,6 +35,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 * {
@@ -701,6 +702,12 @@ a {
 
     .services-grid {
         grid-template-columns: 1fr;
+    }
+
+    .about-stats {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
     }
 
     .contact-container {
