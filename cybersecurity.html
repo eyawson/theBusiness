@@ -15,7 +15,7 @@
     <title>Yawstone | Cybersecurity Advisory</title>
 </head>
 
-<body>
+<body class="cyber-page">
     <div id="app">
         <!-- HEADER -->
         <header class="header">
@@ -42,7 +42,7 @@
             <div class="hero-overlay"></div>
             <div class="container relative">
                 <h1 class="hero-title fade-up-element is-visible">Cybersecurity <br><span class="text-gradient"
-                        style="background: linear-gradient(135deg, var(--color-accent-green), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Advisory</span>
+                        style="background: linear-gradient(135deg, var(--color-accent-green), #fff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Advisory</span>
                 </h1>
                 <p class="hero-subtitle fade-up-element is-visible" style="transition-delay: 0.1s;">Protecting your most
                     critical assets with strategic guidance and robust security architecture resilient against modern
@@ -53,48 +53,82 @@
         <!-- SERVICE DETAILS -->
         <section class="service-details section fade-up-element">
             <div class="container">
+                <!-- Tech Stack Strip -->
+                <div class="trust-strip fade-up-element" style="border-color: rgba(16, 185, 129, 0.1);">
+                    <div class="trust-flex">
+                        <div class="trust-item">Palo Alto Networks</div>
+                        <div class="trust-item" style="color: var(--color-accent-green)">CrowdStrike</div>
+                        <div class="trust-item">AWS Security</div>
+                        <div class="trust-item" style="color: var(--color-accent-green)">Splunk SIEM</div>
+                        <div class="trust-item">Zero Trust Model</div>
+                    </div>
+                </div>
+
                 <div class="service-content">
                     <h2>Defending the Digital Perimeter</h2>
                     <p>Security isn't a product; it's an architecture. Our Advisory collective provides elite consulting
                         to identify vulnerabilities, harden enterprise systems, and align your defensive posture with
                         global compliance standards.</p>
 
-                    <div class="service-features-grid">
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-green);">
-                            <h3 style="color: var(--color-accent-green)">Threat Modeling</h3>
-                            <p>Identify architectural flaws early. We construct comprehensive threat models
-                                (STRIDE/DREAD) to proactively dismantle potential attack vectors.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-green);">
-                            <h3 style="color: var(--color-accent-green)">Secure Architecture</h3>
-                            <p>Design Zero-Trust networks and secure cloud infrastructures (AWS/Azure) that
-                                compartmentalize breaches and strictly enforce least-privilege access.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-green);">
-                            <h3 style="color: var(--color-accent-green)">Risk Assessments</h3>
-                            <p>Thorough evaluation of your organization's risk profile, third-party vendor risks, and
-                                internal policies to quantify and mitigate exposure.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-green);">
-                            <h3 style="color: var(--color-accent-green)">Compliance & Auditing</h3>
-                            <p>Navigate complex regulatory landscapes (SOC2, HIPAA, GDPR, ISO 27001) effortlessly with
-                                expert guidance and continuous compliance monitoring.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-green);">
-                            <h3 style="color: var(--color-accent-green)">Penetration Testing Review</h3>
-                            <p>We analyze penetration test reports and translate raw technical findings into actionable,
-                                prioritized remediation strategies for development teams.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-green);">
-                            <h3 style="color: var(--color-accent-green)">Incident Response Prep</h3>
-                            <p>Establish resilient playbooks, tabletop exercises, and communication protocols so your
-                                team is ready when an incident inevitably occurs.</p>
+                    <!-- Methodology -->
+                    <div class="process-section fade-up-element">
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem;">Our Security Methodology</h3>
+                        <p style="color: var(--color-text-muted);">A proactive framework for identifying, quantifying,
+                            and eliminating digital risk.</p>
+
+                        <div class="process-grid">
+                            <div class="process-step">
+                                <div class="step-number">01</div>
+                                <h4>Assess & Quantify</h4>
+                                <p>Thorough penetration testing and risk assessments across your entire infrastructure
+                                    mapping out specific threat vectors and potential exposure.</p>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">02</div>
+                                <h4>Harden & Architect</h4>
+                                <p>Designing robust Zero-Trust network topologies, implementing strict identity access
+                                    management, and enforcing cryptographic standards.</p>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">03</div>
+                                <h4>Monitor & React</h4>
+                                <p>Deploying cutting-edge SIEM structures and writing targeted incident response
+                                    playbooks to ensure rapid containment of active threats.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="cta-banner fade-up-element"
+                    <!-- The Details (Consulting vs Doing) -->
+                    <div class="split-section fade-up-element">
+                        <div class="split-column">
+                            <h3>Strategic Advisory</h3>
+                            <p>CISO-level guidance to mature your security posture and maintain continuous compliance.
+                            </p>
+                            <ul class="split-list">
+                                <li>Regulatory Compliance (SOC2, HIPAA, ISO 27001)</li>
+                                <li>Third-party Vendor Risk Management</li>
+                                <li>Executive Threat Modeling (STRIDE)</li>
+                                <li>Security Policy & Governance</li>
+                            </ul>
+                        </div>
+                        <div class="split-column">
+                            <h3>Technical Defense</h3>
+                            <p>Hands-on engineering to secure your infrastructure against sophisticated attacks.</p>
+                            <ul class="split-list">
+                                <li>Cloud Infrastructure Review (AWS/Azure IAM)</li>
+                                <li>Penetration Testing Remediation</li>
+                                <li>DevSecOps Pipeline Integration</li>
+                                <li>Custom SIEM Log Aggregation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced CTA -->
+                    <div class="cta-banner enhanced fade-up-element"
                         style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 0, 0, 0)); border-color: rgba(16, 185, 129, 0.2);">
                         <h3>Secure your operations today.</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 2rem; font-size: 1.1rem;">Don't wait
+                            for a breach. Connect with our Advisory team to schedule a comprehensive assessment.</p>
                         <a href="/#contact" class="btn btn-primary"
                             style="background: var(--color-accent-green); box-shadow: none; color: #fff;">Schedule an
                             Assessment</a>

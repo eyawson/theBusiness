@@ -15,7 +15,7 @@
     <title>Yawstone | ServiceNow Consultancy</title>
 </head>
 
-<body>
+<body class="sn-page">
     <div id="app">
         <!-- HEADER -->
         <header class="header">
@@ -42,7 +42,7 @@
             <div class="hero-overlay"></div>
             <div class="container relative">
                 <h1 class="hero-title fade-up-element is-visible">ServiceNow <br><span class="text-gradient"
-                        style="background: linear-gradient(135deg, var(--color-accent-blue), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Consultancy</span>
+                        style="background: linear-gradient(135deg, var(--color-accent-blue), #fff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Consultancy</span>
                 </h1>
                 <p class="hero-subtitle fade-up-element is-visible" style="transition-delay: 0.1s;">Empowering
                     enterprise organizations through sophisticated digital workflow automation and IT transformation.
@@ -53,48 +53,81 @@
         <!-- SERVICE DETAILS -->
         <section class="service-details section fade-up-element">
             <div class="container">
+                <!-- Tech Stack Strip -->
+                <div class="trust-strip fade-up-element" style="border-color: rgba(59, 130, 246, 0.1);">
+                    <div class="trust-flex">
+                        <div class="trust-item">ServiceNow App Engine</div>
+                        <div class="trust-item" style="color: var(--color-accent-blue)">ITSM / ITOM</div>
+                        <div class="trust-item">IntegrationHub</div>
+                        <div class="trust-item" style="color: var(--color-accent-blue)">SecOps</div>
+                        <div class="trust-item">Service Portal</div>
+                    </div>
+                </div>
+
                 <div class="service-content">
                     <h2>Orchestrating the Modern Enterprise</h2>
                     <p>We architect tailored ServiceNow instances to drive critical IT transformation. From standard
                         ITSM deployments to complex custom application development via App Engine, our team ensures your
                         workflows operate at peak efficiency.</p>
 
-                    <div class="service-features-grid">
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-blue);">
-                            <h3 style="color: var(--color-accent-blue)">ITSM Excellence</h3>
-                            <p>Streamline incident, problem, and change management with configurations that align
-                                perfectly with ITIL best practices and your unique operational model.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-blue);">
-                            <h3 style="color: var(--color-accent-blue)">Custom App Engine</h3>
-                            <p>Develop bespoke, resilient enterprise applications on the Now Platform to solve business
-                                challenges that out-of-the-box software cannot handle.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-blue);">
-                            <h3 style="color: var(--color-accent-blue)">ITOM & Discovery</h3>
-                            <p>Gain absolute visibility into your infrastructure. We implement meticulous Service
-                                Mapping and configuration management databases (CMDB).</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-blue);">
-                            <h3 style="color: var(--color-accent-blue)">Portal & Workspace UI</h3>
-                            <p>Elevate the employee experience. We utilize our Web Design expertise to build beautiful,
-                                highly functional Service Portals and customized workspaces.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-blue);">
-                            <h3 style="color: var(--color-accent-blue)">SecOps Integration</h3>
-                            <p>Rapidly respond to vulnerabilities and security incidents by integrating ServiceNow with
-                                enterprise security tools, bridging IT and Cyber ops.</p>
-                        </div>
-                        <div class="feature-box" style="border-top: 3px solid var(--color-accent-blue);">
-                            <h3 style="color: var(--color-accent-blue)">Strategic Roadmapping</h3>
-                            <p>Ensure long-term ROI. We offer executive-level advisory on licensing, platform
-                                governance, and multi-year rollout strategies.</p>
+                    <!-- Methodology -->
+                    <div class="process-section fade-up-element">
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem;">Our Implementation Methodology</h3>
+                        <p style="color: var(--color-text-muted);">A structured approach to migrating and automating
+                            enterprise workflows.</p>
+
+                        <div class="process-grid">
+                            <div class="process-step">
+                                <div class="step-number">01</div>
+                                <h4>Assess & Road-map</h4>
+                                <p>Deep-dive discovery sessions to map existing processes, identify automation
+                                    bottlenecks, and define the target architecture capability model.</p>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">02</div>
+                                <h4>Architect & Build</h4>
+                                <p>Developing the solution strictly adhering to ServiceNow baseline best
+                                    practices—customizing workflows, configuring modules, and building portal UI.</p>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">03</div>
+                                <h4>Enable & Automate</h4>
+                                <p>Deploying the solution into production with rigorous UAT, organizational change
+                                    management, and continuous optimization pipelines.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="cta-banner fade-up-element"
+                    <!-- The Details (Consulting vs Doing) -->
+                    <div class="split-section fade-up-element">
+                        <div class="split-column">
+                            <h3>Strategic Advisory</h3>
+                            <p>Executive consulting to ensure your Now Platform investment delivers maximum ROI.</p>
+                            <ul class="split-list">
+                                <li>Platform Governance & Operations</li>
+                                <li>Licensing & Portfolio Rationalization</li>
+                                <li>CMDB Health & Maturity Assessment</li>
+                                <li>Operating Model Transformation</li>
+                            </ul>
+                        </div>
+                        <div class="split-column">
+                            <h3>Technical Engineering</h3>
+                            <p>Hands-on implementation and scripting by certified ServiceNow engineers.</p>
+                            <ul class="split-list">
+                                <li>Bespoke Application Development (App Engine)</li>
+                                <li>Complex API & IntegrationHub Setup</li>
+                                <li>Service Portal / UI Builder Customization</li>
+                                <li>Automated Testing Frameworks (ATF)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced CTA -->
+                    <div class="cta-banner enhanced fade-up-element"
                         style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(0, 0, 0, 0)); border-color: rgba(59, 130, 246, 0.2);">
                         <h3>Ready to automate your enterprise?</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 2rem; font-size: 1.1rem;">Harness the
+                            power of the Now Platform with certified experts.</p>
                         <a href="/#contact" class="btn btn-primary"
                             style="background: var(--color-accent-blue); box-shadow: none;">Consult with an
                             Architect</a>
