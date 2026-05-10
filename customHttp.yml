@@ -1,0 +1,51 @@
+# Custom response headers for Amplify Hosting.
+#
+# !!! HEADS UP — THIS FILE IS CURRENTLY INERT !!!
+# Amplify Hosting only reads customHttp.yml for git-connected (continuous-deployment)
+# apps. This app is in manual deploy mode, so this file is NOT being applied.
+# The live headers are managed via the Amplify Console UI:
+#   AWS Console -> Amplify -> (this app) -> Hosting -> Custom headers
+# Keep this file and the Console value in sync manually until hosting moves to
+# continuous deployment, at which point this file becomes authoritative.
+# See CLAUDE.md "Security headers — manual mode caveat" for context.
+#
+# CSP rationale (see CLAUDE.md "Federal credibility / Security headers"):
+#   - script-src 'self'           : zero inline scripts in this codebase, so strict.
+#   - style-src 'self' + Google   : we still load fonts from Google Fonts CDN; tighten
+#                                   to 'self' only when Phase 3.5 self-hosts the fonts.
+#   - style-src-attr 'unsafe-inline' : we have ~53 inline style="" attrs across the four
+#                                     pages. Refactoring them is a separate pass; the
+#                                     style-src-attr directive scopes the allowance to
+#                                     attribute styles only, not stylesheets.
+#   - connect-src wildcard for execute-api : the contact form fetch hits API Gateway;
+#                                            wildcard scoped to *.execute-api.us-east-1.amazonaws.com
+#                                            so future stage promotion doesn't break.
+#   - img-src includes data:      : the favicon is a data: URL SVG.
+#   - frame-ancestors 'none'      : modern equivalent of X-Frame-Options DENY.
+#
+# HSTS note: the `preload` directive is included so the header is preload-eligible,
+# but to actually be on the browser preload list, submit yawstone.com at
+# https://hstspreload.org/. Removal from the preload list takes weeks, so don't submit
+# until you're sure HTTPS is locked in for all subdomains too.
+
+customHeaders:
+  - pattern: '**/*'
+    headers:
+      - key: 'Strict-Transport-Security'
+        value: 'max-age=31536000; includeSubDomains; preload'
+      - key: 'Content-Security-Policy'
+        value: "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.execute-api.us-east-1.amazonaws.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+      - key: 'X-Content-Type-Options'
+        value: 'nosniff'
+      - key: 'X-Frame-Options'
+        value: 'DENY'
+      - key: 'Referrer-Policy'
+        value: 'strict-origin-when-cross-origin'
+      - key: 'Permissions-Policy'
+        value: 'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), midi=(), interest-cohort=()'
+      - key: 'X-DNS-Prefetch-Control'
+        value: 'off'
+      - key: 'Cross-Origin-Opener-Policy'
+        value: 'same-origin'
+      - key: 'Cross-Origin-Resource-Policy'
+        value: 'same-origin'

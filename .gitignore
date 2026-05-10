@@ -23,6 +23,17 @@ dist-ssr
 *.sln
 *.sw?
 
+# Claude Code — personal local overrides only
+.claude/settings.local.json
+
+# Local env (API URL is public anyway, but kept out of git as a habit)
+.env
+
+# Amplify state file — contains AWS account ID, IAM role names, CFN stack ARN.
+# Not credentials, but defensive default for repos that may go public.
+# Re-create from a working clone or by running `amplify pull` if needed.
+amplify/team-provider-info.json
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*

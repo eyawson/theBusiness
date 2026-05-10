@@ -1,15 +1,17 @@
 const awsServerlessExpress = require('aws-serverless-express');
 const app = require('./app');
 
-/**
- * @type {import('http').Server}
- */
 const server = awsServerlessExpress.createServer(app);
 
-/**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
 exports.handler = (event, context) => {
-  console.log(`EVENT: ${JSON.stringify(event)}`);
+  const ctx = (event && event.requestContext) || {};
+  const identity = ctx.identity || {};
+  console.log('REQ', {
+    requestId: ctx.requestId,
+    method: event && event.httpMethod,
+    path: event && event.path,
+    sourceIp: identity.sourceIp,
+    bytes: event && event.body ? event.body.length : 0,
+  });
   return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };

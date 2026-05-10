@@ -1,118 +1,187 @@
-/*
-Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-    http://aws.amazon.com/apache2.0/
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-*/
+const express = require('express');
+const bodyParser = require('body-parser');
+const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
+const sesClient = new SESClient({ region: process.env.REGION || 'us-east-1' });
 
+const ALLOWED_ORIGINS = new Set([
+  'https://yawstone.com',
+  'https://www.yawstone.com',
+  'http://localhost:5173',
+]);
 
+const FROM_ADDRESS = process.env.FROM_ADDRESS || 'yawson@yawstone.com';
+const TO_ADDRESS = process.env.TO_ADDRESS || 'yawson@yawstone.com';
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+const LIMITS = {
+  name: 200,
+  email: 320,
+  phone: 40,
+  organization: 200,
+  role: 120,
+  interest: 80,
+  engagement: 40,
+  timeline: 40,
+  message: 5000,
+};
 
-// Import AWS SES v3 Client
-const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
-const sesClient = new SESClient({ region: process.env.REGION || "us-east-1" });
+const ALLOWED_INTERESTS = new Set(['web', 'servicenow', 'cyber', 'multiple']);
+const ALLOWED_ENGAGEMENT = new Set(['general', 'briefing', 'teaming', 'rfi-rfp', 'capability-statement']);
+const ALLOWED_TIMELINE = new Set(['immediate', 'quarter', 'fy', 'exploring']);
 
-// declare a new express app
-const app = express()
-app.use(bodyParser.json())
-app.use(awsServerlessExpressMiddleware.eventContext())
+const ENGAGEMENT_LABELS = {
+  general: 'General Inquiry',
+  briefing: 'Capability Briefing Request',
+  teaming: 'Teaming or Subcontracting',
+  'rfi-rfp': 'RFI or RFP',
+  'capability-statement': 'Capability Statement Request',
+};
 
-// Enable CORS for all methods
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "*")
-  next()
+const TIMELINE_LABELS = {
+  immediate: 'Immediate',
+  quarter: 'This Quarter',
+  fy: 'This Fiscal Year',
+  exploring: 'Exploring',
+};
+
+// RFC-5322-ish loose check; we send to SES which does its own validation downstream.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const MIN_FILL_TIME_MS = 1500;
+
+const app = express();
+app.disable('x-powered-by');
+app.use(bodyParser.json({ limit: '32kb' }));
+app.use(awsServerlessExpressMiddleware.eventContext());
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Max-Age', '600');
+  }
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
 });
 
+function isString(v) {
+  return typeof v === 'string';
+}
 
-/**********************
- * Example get method *
- **********************/
+function scrubHeader(s) {
+  return String(s).replace(/[\r\n]+/g, ' ').trim();
+}
 
-app.get('/contact', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
+app.post('/contact', async (req, res) => {
+  const body = req.body || {};
 
-app.get('/contact/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
+  // Honeypot — silent fake-success so bots don't learn it's rejected.
+  if (body.company && String(body.company).trim() !== '') {
+    return res.json({ ok: true });
+  }
 
-/****************************
-* Example post method *
-****************************/
+  // Time-trap — humans take more than ~1.5s to fill out the form.
+  const elapsed = Number(body._t);
+  if (!Number.isFinite(elapsed) || elapsed < MIN_FILL_TIME_MS) {
+    return res.json({ ok: true });
+  }
 
-app.post('/contact', async function(req, res) {
+  const { name, email, phone, organization, role, interest, engagement, timeline, message } = body;
+
+  if (!isString(name) || !isString(email) || !isString(interest) || !isString(message)) {
+    return res.status(400).json({ error: 'Invalid request.' });
+  }
+  for (const v of [phone, organization, role, engagement, timeline]) {
+    if (v !== undefined && !isString(v)) {
+      return res.status(400).json({ error: 'Invalid request.' });
+    }
+  }
+
+  const trimmed = {
+    name: name.trim(),
+    email: email.trim(),
+    phone: (phone || '').trim(),
+    organization: (organization || '').trim(),
+    role: (role || '').trim(),
+    interest: interest.trim(),
+    engagement: (engagement || '').trim(),
+    timeline: (timeline || '').trim(),
+    message: message.trim(),
+  };
+
+  if (!trimmed.name || !trimmed.email || !trimmed.interest || !trimmed.message) {
+    return res.status(400).json({ error: 'Missing required fields.' });
+  }
+  if (
+    trimmed.name.length > LIMITS.name ||
+    trimmed.email.length > LIMITS.email ||
+    trimmed.phone.length > LIMITS.phone ||
+    trimmed.organization.length > LIMITS.organization ||
+    trimmed.role.length > LIMITS.role ||
+    trimmed.interest.length > LIMITS.interest ||
+    trimmed.engagement.length > LIMITS.engagement ||
+    trimmed.timeline.length > LIMITS.timeline ||
+    trimmed.message.length > LIMITS.message
+  ) {
+    return res.status(400).json({ error: 'Field too long.' });
+  }
+  if (!EMAIL_RE.test(trimmed.email)) {
+    return res.status(400).json({ error: 'Invalid email.' });
+  }
+  if (!ALLOWED_INTERESTS.has(trimmed.interest)) {
+    return res.status(400).json({ error: 'Invalid interest.' });
+  }
+  if (trimmed.engagement && !ALLOWED_ENGAGEMENT.has(trimmed.engagement)) {
+    return res.status(400).json({ error: 'Invalid engagement type.' });
+  }
+  if (trimmed.timeline && !ALLOWED_TIMELINE.has(trimmed.timeline)) {
+    return res.status(400).json({ error: 'Invalid timeline.' });
+  }
+
+  const engagementLabel = trimmed.engagement ? ENGAGEMENT_LABELS[trimmed.engagement] : 'Not provided';
+  const timelineLabel = trimmed.timeline ? TIMELINE_LABELS[trimmed.timeline] : 'Not provided';
+
+  const subject = scrubHeader(`Yawstone Inquiry from ${trimmed.name} [${trimmed.interest}]`);
+  const textBody =
+    `New Contact Inquiry:\n\n` +
+    `Name: ${trimmed.name}\n` +
+    `Email: ${trimmed.email}\n` +
+    `Phone: ${trimmed.phone || 'Not provided'}\n` +
+    `Organization: ${trimmed.organization || 'Not provided'}\n` +
+    `Role: ${trimmed.role || 'Not provided'}\n` +
+    `Interest: ${trimmed.interest}\n` +
+    `Engagement: ${engagementLabel}\n` +
+    `Timeline: ${timelineLabel}\n\n` +
+    `Message:\n${trimmed.message}\n`;
+
   try {
-    const { name, email, phone, interest, message } = req.body;
-    
-    const params = {
-      Destination: {
-        ToAddresses: ["yawson@yawstone.com"] // MUST BE VERIFIED IN SES if in Sandbox
-      },
-      Message: {
-        Body: {
-          Text: { Data: `New Contact Inquiry:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`, Charset: "UTF-8" }
+    await sesClient.send(
+      new SendEmailCommand({
+        Destination: { ToAddresses: [TO_ADDRESS] },
+        Message: {
+          Body: { Text: { Data: textBody, Charset: 'UTF-8' } },
+          Subject: { Data: subject, Charset: 'UTF-8' },
         },
-        Subject: { Data: `Yawstone Inquiry from ${name} [${interest}]`, Charset: "UTF-8" }
-      },
-      // IMPORTANT: This Source email MUST be verified in your AWS SES console
-      Source: "yawson@yawstone.com" 
-    };
-
-    const command = new SendEmailCommand(params);
-    await sesClient.send(command);
-
-    res.json({success: 'Email sent successfully!', body: req.body})
-  } catch (error) {
-    console.error("SES Error:", error);
-    res.status(500).json({ error: error.message, url: req.url });
+        Source: FROM_ADDRESS,
+        ReplyToAddresses: [trimmed.email],
+      }),
+    );
+    return res.json({ ok: true });
+  } catch (err) {
+    const requestId = (req.apiGateway && req.apiGateway.event && req.apiGateway.event.requestContext && req.apiGateway.event.requestContext.requestId) || '';
+    console.error('SES_SEND_FAILED', { requestId, name: err && err.name, code: err && err.$metadata && err.$metadata.httpStatusCode });
+    return res.status(500).json({ error: 'Unable to send message. Please email us directly.' });
   }
 });
 
-app.post('/contact/*', function(req, res) {
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+app.listen(3000, () => {
+  console.log('App started');
 });
 
-/****************************
-* Example put method *
-****************************/
-
-app.put('/contact', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-app.put('/contact/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-/****************************
-* Example delete method *
-****************************/
-
-app.delete('/contact', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
-app.delete('/contact/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
-app.listen(3000, function() {
-    console.log("App started")
-});
-
-// Export the app object. When executing the application local this does nothing. However,
-// to port it to AWS Lambda we will create a wrapper around that will load the app from
-// this file
-module.exports = app
+module.exports = app;

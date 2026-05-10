@@ -74,12 +74,12 @@
           </div>
           <div class="about-stats">
             <div class="stat-item">
-              <span class="stat-value">Web</span>
-              <span class="stat-label">Design & Development</span>
-            </div>
-            <div class="stat-item">
               <span class="stat-value">ServiceNow</span>
               <span class="stat-label">Enterprise Architecture</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">Web</span>
+              <span class="stat-label">Design & Development</span>
             </div>
             <div class="stat-item">
               <span class="stat-value">Cyber</span>
@@ -99,6 +99,25 @@
             security engineering.</p>
         </div>
         <div class="services-grid">
+          <!-- ServiceNow (flagship) -->
+          <div class="service-card sn-card flagship">
+            <span class="flagship-tag">Flagship Practice</span>
+            <div class="service-icon">[S]</div>
+            <h3 class="service-title">ServiceNow Consultancy</h3>
+            <p class="service-description">Empowering organizations through digital workflow automation. We architect
+              tailored ServiceNow instances to drive IT transformation.</p>
+            <p class="service-capabilities-label">Capabilities include:</p>
+            <ul class="service-features">
+              <li>ITSM Implementation</li>
+              <li>Custom App Development</li>
+              <li>Workflow Automation</li>
+              <li class="more-indicator">And beyond...</li>
+            </ul>
+            <a href="/servicenow.html" class="btn btn-outline"
+              style="margin-top: 1.5rem; width: 100%; border-color: rgba(59, 130, 246, 0.4); color: var(--color-accent-blue);">Explore
+              Consultancy &rarr;</a>
+          </div>
+
           <!-- Web Design -->
           <div class="service-card">
             <div class="service-icon">[W]</div>
@@ -114,24 +133,6 @@
             </ul>
             <a href="/web-design.html" class="btn btn-outline" style="margin-top: 1.5rem; width: 100%;">Explore Studio
               &rarr;</a>
-          </div>
-
-          <!-- ServiceNow -->
-          <div class="service-card sn-card">
-            <div class="service-icon">[S]</div>
-            <h3 class="service-title">ServiceNow Consultancy</h3>
-            <p class="service-description">Empowering organizations through digital workflow automation. We architect
-              tailored ServiceNow instances to drive IT transformation.</p>
-            <p class="service-capabilities-label">Capabilities include:</p>
-            <ul class="service-features">
-              <li>ITSM Implementation</li>
-              <li>Custom App Development</li>
-              <li>Workflow Automation</li>
-              <li class="more-indicator">And beyond...</li>
-            </ul>
-            <a href="/servicenow.html" class="btn btn-outline"
-              style="margin-top: 1.5rem; width: 100%; border-color: rgba(59, 130, 246, 0.4); color: var(--color-accent-blue);">Explore
-              Consultancy &rarr;</a>
           </div>
 
           <!-- Cybersecurity -->
@@ -151,6 +152,25 @@
               style="margin-top: 1.5rem; width: 100%; border-color: rgba(16, 185, 129, 0.4); color: var(--color-accent-green);">Explore
               Advisory &rarr;</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEDERAL CAPABILITY CALLOUT -->
+    <section class="federal-section section fade-up-element" style="padding-top: 4rem; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="section-header center" style="margin-bottom: 1.5rem;">
+          <h2 class="section-title" style="font-size: 2rem;">Federal Capability</h2>
+          <p class="federal-summary">
+            Yawstone Holdings LLC is a SAM.gov registered Small Disadvantaged Business (SDB) providing
+            ServiceNow ITOM consulting services to federal and commercial clients. Cleared personnel,
+            framework-aligned, ready to bid.
+            <span class="federal-codes-inline">CAGE: <code>1P6B0</code> &nbsp;·&nbsp; UEI:
+              <code>Q8YDG3NQZGB1</code> &nbsp;·&nbsp; NAICS: <code>541512</code></span>
+          </p>
+          <p style="margin-top: 1.5rem;">
+            <a href="/servicenow.html#federal" class="btn btn-outline">View Full Capability &rarr;</a>
+          </p>
         </div>
       </div>
     </section>
@@ -176,6 +196,10 @@
         </div>
         <div class="contact-form-wrapper">
           <form id="contact-form" class="premium-form">
+            <div class="hp-field" aria-hidden="true">
+              <label for="company">Company (leave blank)</label>
+              <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+            </div>
             <div class="form-group">
               <label for="name">Name</label>
               <input type="text" id="name" name="name" placeholder="Jane Doe" required>
@@ -186,18 +210,51 @@
                 <input type="email" id="email" name="email" placeholder="jane@example.com" required>
               </div>
               <div class="form-group">
-                <label for="phone">Phone</label>
+                <label for="phone">Phone <span class="optional-hint">(optional)</span></label>
                 <input type="tel" id="phone" name="phone" placeholder="(936) 522-6943">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="organization">Organization / Agency <span class="optional-hint">(optional)</span></label>
+                <input type="text" id="organization" name="organization" placeholder="e.g. GSA, Acme Corp">
+              </div>
+              <div class="form-group">
+                <label for="role">Role / Title <span class="optional-hint">(optional)</span></label>
+                <input type="text" id="role" name="role" placeholder="e.g. Contracting Officer, CIO">
               </div>
             </div>
             <div class="form-group">
               <label for="interest">Area of Interest</label>
               <select id="interest" name="interest">
-                <option value="web">Web Design & Development</option>
                 <option value="servicenow">ServiceNow Architecture</option>
+                <option value="web">Web Design & Development</option>
                 <option value="cyber">Cybersecurity Advisory</option>
                 <option value="multiple">Comprehensive / Multiple Services</option>
               </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="engagement">Engagement Type <span class="optional-hint">(optional)</span></label>
+                <select id="engagement" name="engagement">
+                  <option value="">Select...</option>
+                  <option value="general">General Inquiry</option>
+                  <option value="briefing">Capability Briefing Request</option>
+                  <option value="teaming">Teaming or Subcontracting</option>
+                  <option value="rfi-rfp">RFI or RFP</option>
+                  <option value="capability-statement">Capability Statement Request</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="timeline">Timeline <span class="optional-hint">(optional)</span></label>
+                <select id="timeline" name="timeline">
+                  <option value="">Select...</option>
+                  <option value="immediate">Immediate</option>
+                  <option value="quarter">This Quarter</option>
+                  <option value="fy">This Fiscal Year</option>
+                  <option value="exploring">Exploring</option>
+                </select>
+              </div>
             </div>
             <div class="form-group">
               <label for="message">Project Details</label>
@@ -241,7 +298,13 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2026 Yawstone. All rights reserved.</p>
+          <p>&copy; 2026 Yawstone Holdings LLC. All rights reserved.</p>
+          <div class="footer-federal">
+            <span>CAGE <code>1P6B0</code></span>
+            <span>UEI <code>Q8YDG3NQZGB1</code></span>
+            <span>NAICS <code>541512</code></span>
+            <span>SAM.gov Registered &middot; SDB</span>
+          </div>
         </div>
       </div>
     </footer>
